@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33403.182
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotNetCl", "BotNetCl\BotNetCl.csproj", "{86F8E6D3-9D7E-437A-BDB5-5C0A7E57A02F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{86F8E6D3-9D7E-437A-BDB5-5C0A7E57A02F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86F8E6D3-9D7E-437A-BDB5-5C0A7E57A02F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86F8E6D3-9D7E-437A-BDB5-5C0A7E57A02F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86F8E6D3-9D7E-437A-BDB5-5C0A7E57A02F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C50ED6D5-4CD9-44FC-BA8D-6C7F6BDF50C4}
+	EndGlobalSection
+EndGlobal
